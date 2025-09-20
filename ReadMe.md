@@ -7,6 +7,11 @@
     UEFI：從 EFI System Partition 載入 .efi 開機程式（例如 bootx64.efi）
 5. 開機程式再載入作業系統核心，切換到保護模式/長模式，交棒給核心
 
+# IO機制 (伺服器)
+## Kafka: Disk-Level High Throughput Platform
+將所有寫入先寫入作業系統的頁面快取（即OS Cache，實際為記憶體操作）。再由OS以順序寫入磁碟，大幅提高寫入效率。
+從磁碟讀取資料時，採用DMA達到zero-copy，省去從 OS Cache -> User Space -> Socket Cache 的重複copy，降低CPU與記憶體複製開銷。
+
 # 延伸問題
 (1) 0xFFFFFFF0的指令通常是做什麼？為什麼他可以開始執行BIOS？他是做jump嗎？
 0xFFFFFFF0是CPU的reset vector，晶片組把主機板上的 SPI Flash（放 BIOS/UEFI）映射到這個位址，所以 CPU 一解開重置就能抓到那裡的指令
